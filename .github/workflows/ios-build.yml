@@ -63,6 +63,34 @@ jobs:
       - name: 不签名归档（验证打包链路）
         run: ./scripts/build-ios.sh --unsigned --no-export
 
+      - name: 校验打包产物
+        run: |
+          set -euo pipefail
+          ARCHIVE="$(ls -d build/*.xcarchive | head -1)"
+          APP="$ARCHIVE/Products/Applications/IoTCenter.app"
+          test -d "$APP" || { echo "❌ 归档里找不到 IoTCenter.app"; exit 1; }
+          test -f "$APP/www/index.html" || { echo "❌ app 内缺少 www/index.html"; exit 1; }
+
+          VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/Info.plist")"
+          BUILD="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$APP/Info.plist")"
+          FILES="$(find "$APP/www" -type f | wc -l | tr -d ' ')"
+          SIZE="$(du -sh "$APP" | cut -f1)"
+          ARCHS="$(lipo -archs "$APP/IoTCenter" 2>/dev/null || echo unknown)"
+
+          {
+            echo "## 打包产物校验"
+            echo ""
+            echo "| 项目 | 值 |"
+            echo "| --- | --- |"
+            echo "| 版本 | $VERSION ($BUILD) |"
+            echo "| www 文件数 | $FILES |"
+            echo "| 可执行文件架构 | $ARCHS |"
+            echo "| app 体积 | $SIZE |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          echo "app: $APP"
+          echo "版本: $VERSION ($BUILD), www $FILES 个文件, 架构 $ARCHS, 体积 $SIZE"
+
       - name: 上传 xcarchive
         uses: actions/upload-artifact@v4
         with:

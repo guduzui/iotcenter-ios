@@ -44,7 +44,7 @@ ATS 放行、AppIcon 18 张图标尺寸与不透明性、www/index.html 及其�
 | job | runner | 作用 | 需要证书 |
 | --- | --- | --- | --- |
 | `preflight` | ubuntu-latest | 跑 `scripts/preflight.py`，几秒 | 否 |
-| `build-unsigned` | macos-15 | 先模拟器编译，再不签名归档，上传 `.xcarchive` | 否 |
+| `build-unsigned` | macos-15 | 先模拟器编译，再不签名归档，校验 app 内 `www/index.html`、版本号、架构，上传 `.xcarchive` | 否 |
 | `build-signed` | macos-15 | 导入证书/描述文件，归档导出 ipa，可上传 App Store Connect | 是 |
 
 `build-signed` 只在你手动 Run workflow 并勾选 `signed` 时执行；`upload` 勾选后才上传。
