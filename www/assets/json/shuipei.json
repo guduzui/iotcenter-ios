@@ -1,0 +1,14 @@
+{
+    "head":"水培参数设置",
+    "basename":"条件设置",
+    "base":[
+    {"field":"0.2","placehold":"","disc":"EC3","type":"1","value":"","maxlen":"10","minlen":"1","option":[]},
+    {"field":"0.6","placehold":"","disc":"pH3","type":"2","value":"","maxlen":"10","minlen":"1","option":[
+    {"value":"0","display":"MAX"},
+    {"value":"1","display":"min"}
+    ]},
+    {"field":"0.10","placehold":"","disc":"水温2","type":"1","value":"","maxlen":"10","minlen":"1","option":[]},
+    {"field":"0.15","placehold":"","disc":"外部液位3","type":"1","value":"","maxlen":"10","minlen":"1","option":[]}
+    ]
+    }
+    
